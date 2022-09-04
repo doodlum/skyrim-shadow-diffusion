@@ -179,7 +179,7 @@ void ShadowDiffusion::RefreshUI()
 	g_ENB->TwAddVarRW(bar, "Enabled", ETwType::TW_TYPE_BOOLCPP, &bEnabled, TWDEF);
 	g_ENB->TwAddVarRW(bar, "PoissonRadiusScaleBase", ETwType::TW_TYPE_FLOAT, &fPoissonRadiusScaleBase, TWDEF);
 	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceBase", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceBase, TWDEF);
-	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceScalar", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceScalar, TWDEF);
+	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceScale", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceScalar, TWDEF);
 	g_ENB->TwAddVarRW(bar, "DiffusionBase", ETwType::TW_TYPE_FLOAT, &fDiffusionBase, TWDEF);
 	g_ENB->TwAddVarRW(bar, "DiffusionCurve", ETwType::TW_TYPE_FLOAT, &fDiffusionCurve, TWDEF);
 	g_ENB->TwAddVarRW(bar, "DiffusionMin", ETwType::TW_TYPE_FLOAT, &fDiffusionMin, TWDEF);
