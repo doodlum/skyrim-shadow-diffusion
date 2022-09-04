@@ -73,18 +73,6 @@ void ShadowDiffusion::SaveINI()
 
 	ini.SaveFile(L"Data\\SKSE\\Plugins\\ShadowDiffusion.ini");
 }
-//
-//float GetWeatherDiffusion(RE::TESWeather* a_weather)
-//{
-//	if (a_weather->data.flags.any(RE::TESWeather::WeatherDataFlag::kCloudy)) {
-//		return 3.0f;
-//	} else if (a_weather->data.flags.any(RE::TESWeather::WeatherDataFlag::kRainy)) {
-//		return 5.0f;
-//	} else if (a_weather->data.flags.any(RE::TESWeather::WeatherDataFlag::kRainy)) {
-//		return 5.0f;
-//	}
-//	return 1.0f;
-//}
 
 float GetNiColorBrightness(RE::NiColor a_color)
 {
@@ -105,52 +93,6 @@ RE::NiColor GetDALCAverage(RE::NiColor a_directionalAmbientColors[3][2])
 	avg /= 6;
 	return avg;
 }
-
-//class NiDirectionalLight : public RE::NiLight
-//{
-//public:
-//	RE::NiPoint3 m_kWorldDir;
-//	char     _pad[0xC];  // NiColor m_kEffectColor?
-//
-//	// The model direction of the light is (1,0,0). The world direction is
-//	// the first column of the world rotation matrix.
-//	inline const RE::NiPoint3& GetWorldDirection() const
-//	{
-//		return m_kWorldDir;
-//	}
-//};
-
-//float ConvertClimateTimeToGameTime(std::uint8_t a_time)
-//{
-//	float hours = (float)((a_time * 10) / 60);
-//	float minutes = (float)((a_time * 10) % 60);
-//	return hours + (minutes * (100 / 60) / 100);
-//}
-
-//float GetTOD() {
-//	auto sky = RE::Sky::GetSingleton();
-//	auto climate = sky->currentClimate;
-//	auto SunriseBegin = ConvertClimateTimeToGameTime(climate->timing.sunrise.begin);
-//	auto SunriseEnd = ConvertClimateTimeToGameTime(climate->timing.sunrise.end);
-//	auto SunsetBegin = ConvertClimateTimeToGameTime(climate->timing.sunset.begin);
-//	auto SunsetEnd = ConvertClimateTimeToGameTime(climate->timing.sunset.end);
-//	float v6 = sky->currentGameHour;
-//	float v7;
-//	if (SunriseBegin >= v6 || v6 >= SunriseEnd) {
-//		if (SunriseEnd > v6 || v6 > SunsetBegin) {
-//			if (SunsetBegin >= v6 || v6 >= SunsetEnd)
-//				v7 = 0.0f;
-//			else
-//				v7 = (SunsetEnd - v6) / (SunsetEnd - SunsetBegin);
-//		} else {
-//			v7 = 1.0f;
-//		}
-//	} else {
-//		v7 = (v6 - SunriseBegin) / (SunriseEnd - SunriseBegin);
-//	}
-//	return v7;
-//}
-//
 
 float ShadowDiffusion::GetENBParameterFloat(const char* a_filename, const char* a_category, const char* a_keyname)
 {
@@ -233,7 +175,7 @@ void ShadowDiffusion::Update()
 
 void ShadowDiffusion::RefreshUI()
 {
-	auto bar = g_ENB->TwGetBarByEnum(ENB_API::ENBWindowType::EditorBarEffects);
+	auto bar = g_ENB->TwGetBarByEnum(!REL::Module::IsVR() ? ENB_API::ENBWindowType::EditorBarEffects : ENB_API::ENBWindowType::EditorBarObjects);  // ENB misnames its own bar, whoops!
 	g_ENB->TwAddVarRW(bar, "Enabled", ETwType::TW_TYPE_BOOLCPP, &bEnabled, TWDEF);
 	g_ENB->TwAddVarRW(bar, "PoissonRadiusScaleBase", ETwType::TW_TYPE_FLOAT, &fPoissonRadiusScaleBase, TWDEF);
 	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceBase", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceBase, TWDEF);
