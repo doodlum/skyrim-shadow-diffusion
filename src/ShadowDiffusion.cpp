@@ -30,7 +30,7 @@ void ShadowDiffusion::LoadINI()
 
 	GetSettingFloat("GameSetting", fPoissonRadiusScaleBase);
 	GetSettingFloat("GameSetting", fFirstSliceDistanceBase);
-	GetSettingFloat("GameSetting", fFirstSliceDistanceScalar);
+	GetSettingFloat("GameSetting", fFirstSliceDistanceScale);
 
 	GetSettingBool("Diffusion", bEnabled);
 	GetSettingFloat("Diffusion", fDiffusionBase);
@@ -55,7 +55,7 @@ void ShadowDiffusion::SaveINI()
 
 	SetSettingFloat("GameSetting", fPoissonRadiusScaleBase);
 	SetSettingFloat("GameSetting", fFirstSliceDistanceBase);
-	SetSettingFloat("GameSetting", fFirstSliceDistanceScalar);
+	SetSettingFloat("GameSetting", fFirstSliceDistanceScale);
 
 	SetSettingBool("Diffusion", bEnabled);
 	SetSettingFloat("Diffusion", fDiffusionBase);
@@ -151,10 +151,10 @@ void ShadowDiffusion::Update()
 
 					if (sky->lastWeather) {
 						SetGameSettingFloat("fPoissonRadiusScale", "Display", fPoissonRadiusScaleBase * diffusion);
-						SetGameSettingFloat("fFirstSliceDistance", "Display", fFirstSliceDistanceBase * std::lerp(1.0f, diffusion, fFirstSliceDistanceScalar));
+						SetGameSettingFloat("fFirstSliceDistance", "Display", fFirstSliceDistanceBase * std::lerp(1.0f, diffusion, fFirstSliceDistanceScale));
 					} else {
 						SetGameSettingFloat("fPoissonRadiusScale", "Display", fPoissonRadiusScaleBase * diffusion);
-						SetGameSettingFloat("fFirstSliceDistance", "Display", fFirstSliceDistanceBase * std::lerp(1.0f, diffusion, fFirstSliceDistanceScalar));
+						SetGameSettingFloat("fFirstSliceDistance", "Display", fFirstSliceDistanceBase * std::lerp(1.0f, diffusion, fFirstSliceDistanceScale));
 					}
 				}
 			} else {
@@ -162,7 +162,7 @@ void ShadowDiffusion::Update()
 				ambient = 0.0f;
 				sunlight = 0.0f;
 				SetGameSettingFloat("fPoissonRadiusScale", "Display", fPoissonRadiusScaleBase * diffusion);
-				SetGameSettingFloat("fFirstSliceDistance", "Display", fFirstSliceDistanceBase * std::lerp(1.0f, diffusion, fFirstSliceDistanceScalar));
+				SetGameSettingFloat("fFirstSliceDistance", "Display", fFirstSliceDistanceBase * std::lerp(1.0f, diffusion, fFirstSliceDistanceScale));
 			}
 		} else {
 			SetGameSettingFloat("fPoissonRadiusScale", "Display", fPoissonRadiusScaleBase);
@@ -179,7 +179,7 @@ void ShadowDiffusion::RefreshUI()
 	g_ENB->TwAddVarRW(bar, "Enabled", ETwType::TW_TYPE_BOOLCPP, &bEnabled, TWDEF);
 	g_ENB->TwAddVarRW(bar, "PoissonRadiusScaleBase", ETwType::TW_TYPE_FLOAT, &fPoissonRadiusScaleBase, TWDEF);
 	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceBase", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceBase, TWDEF);
-	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceScale", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceScalar, TWDEF);
+	g_ENB->TwAddVarRW(bar, "FirstSliceDistanceScale", ETwType::TW_TYPE_FLOAT, &fFirstSliceDistanceScale, TWDEF);
 	g_ENB->TwAddVarRW(bar, "DiffusionBase", ETwType::TW_TYPE_FLOAT, &fDiffusionBase, TWDEF);
 	g_ENB->TwAddVarRW(bar, "DiffusionCurve", ETwType::TW_TYPE_FLOAT, &fDiffusionCurve, TWDEF);
 	g_ENB->TwAddVarRW(bar, "DiffusionMin", ETwType::TW_TYPE_FLOAT, &fDiffusionMin, TWDEF);
