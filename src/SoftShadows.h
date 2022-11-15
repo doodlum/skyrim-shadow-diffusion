@@ -1,17 +1,14 @@
 #pragma once
 
-#include <nlohmann/json.hpp>
-using json = nlohmann::json;
-
 #include "ENB/ENBSeriesAPI.h"
 #include <shared_mutex>
 
-class ShadowDiffusion
+class SoftShadows
 {
 public:
-	static ShadowDiffusion* GetSingleton()
+	static SoftShadows* GetSingleton()
 	{
-		static ShadowDiffusion handler;
+		static SoftShadows handler;
 		return &handler;
 	}
 
@@ -20,21 +17,19 @@ public:
 		Hooks::Install();
 	}
 
-	ENB_API::ENBSDKALT1001* g_ENB = nullptr;
-	json                    JSONSettings;
 	std::shared_mutex       fileLock;
 
 	// GameSettings
 
 	float& GetGameSettingFloat(std::string a_name, std::string a_section);
-	void SetGameSettingFloat(std::string a_name, std::string a_section, float a_value);
+	void   SetGameSettingFloat(std::string a_name, std::string a_section, float a_value);
 
 	// Settings
 
 	bool  bEnabled = true;
 	float fPoissonRadiusScaleBase = 4.0f;
 	float fFirstSliceDistanceBase = 2000.0f;
-	float fFirstSliceDistanceScalar = 0.5f;
+	float fFirstSliceDistanceScale = 0.5f;
 
 	float fDiffusionBase = 0.1f;
 	float fDiffusionCurve = 20.0f;
@@ -53,27 +48,8 @@ public:
 	float ambient = 1.0f;
 	float sunlight = 1.0f;
 
-	struct ENBTimeOfDay
-	{
-		float dawn;
-		float sunrise;
-		float day;
-		float sunset;
-		float dusk;
-		float night;
-		float interiorDay;
-		float interiorNight;
-		float interiorFactor;
-		float nightFactor;
-	};
-	ENBTimeOfDay TimeOfDay;
-
 	void LoadINI();
 	void SaveINI();
-
-	float GetENBParameterFloat(const char* a_filename, const char* a_category, const char* a_keyname);
-
-	void UpdateENBTimeOfDay();
 
 	void Update();
 
@@ -84,7 +60,6 @@ public:
 protected:
 	struct Hooks
 	{
-
 		struct PlayerCharacter_Update
 		{
 			static void thunk(RE::PlayerCharacter* a_player, float a_delta)
@@ -102,16 +77,16 @@ protected:
 	};
 
 private:
-	ShadowDiffusion()
+	SoftShadows()
 	{
 		LoadINI();
 	};
 
-	ShadowDiffusion(const ShadowDiffusion&) = delete;
-	ShadowDiffusion(ShadowDiffusion&&) = delete;
+	SoftShadows(const SoftShadows&) = delete;
+	SoftShadows(SoftShadows&&) = delete;
 
-	~ShadowDiffusion() = default;
+	~SoftShadows() = default;
 
-	ShadowDiffusion& operator=(const ShadowDiffusion&) = delete;
-	ShadowDiffusion& operator=(ShadowDiffusion&&) = delete;
+	SoftShadows& operator=(const SoftShadows&) = delete;
+	SoftShadows& operator=(SoftShadows&&) = delete;
 };
