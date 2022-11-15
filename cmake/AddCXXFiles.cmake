@@ -6,7 +6,6 @@ function(add_cxx_files TARGET)
 		"include/*.hpp"
 		"include/*.hxx"
 		"include/*.inl"
-		"include/*.cpp"
 	)
 
 	source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include

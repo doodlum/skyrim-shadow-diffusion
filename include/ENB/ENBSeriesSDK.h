@@ -69,7 +69,7 @@ namespace ENB_SDK
 	};
 
 	//v1001:
-	enum class ENBStateType : long
+	enum ENBStateType : long
 	{
 		ENBState_IsEditorActive = 1,      //is mod editor windows are opened
 		ENBState_IsEffectsWndActive = 2,  //is shader effects window of mod editor opened
@@ -78,6 +78,24 @@ namespace ENB_SDK
 		ENBState_MouseLeft = 5,           //mouse key state boolean pressed or not
 		ENBState_MouseRight = 6,          //mouse key state boolean pressed or not
 		ENBState_MouseMiddle = 7,         //mouse key state boolean pressed or not
+
+		//v1002:
+		ENBState_ulWeatherCurrent = 8,          //current weather index as unsigned long
+		ENBState_ulWeatherOutgoing = 9,         //outgoing weather index as unsigned long
+		ENBState_fWeatherTransition = 10,       //weather transition as float
+		ENBState_fTimeOfDay = 11,               //time of the day 24 hours format as float
+		ENBState_fTODFactorDawn = 12,           //time weight 0..1 range
+		ENBState_fTODFactorSunrise = 13,        //time weight 0..1 range
+		ENBState_fTODFactorDay = 14,            //time weight 0..1 range
+		ENBState_fTODFactorSunset = 15,         //time weight 0..1 range
+		ENBState_fTODFactorDusk = 16,           //time weight 0..1 range
+		ENBState_fTODFactorNight = 17,          //time weight 0..1 range
+		ENBState_fTODFactorInteriorDay = 18,    //time weight 0..1 range
+		ENBState_fTODFactorInteriorNight = 19,  //time weight 0..1 range
+		ENBState_fNightDayFactor = 20,          //time weight 0..1 range
+		ENBState_fInteriorFactor = 21,          //time weight 0..1 range
+		ENBState_ulWorldSpaceID = 22,           //as unsigned long
+		ENBState_ulLocationID = 23,             //as unsigned long
 
 		ENBState_FORCEDWORD = 0x7fffffff  //unused
 	};

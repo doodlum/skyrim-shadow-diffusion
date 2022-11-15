@@ -1,11 +1,22 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.21)
 
 project(
-	ShadowDiffusion
-	VERSION 1.0.0
+	SoftShadows
+	VERSION 1.2.0
 	LANGUAGES CXX
 )
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include(XSEPlugin)
-find_package(binary_io CONFIG REQUIRED)
+
+target_include_directories(
+	"${PROJECT_NAME}"
+	PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+	PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR}/cmake
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+		${SIMPLEINI_INCLUDE_DIRS}
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC CommonLibSSE::CommonLibSSE)

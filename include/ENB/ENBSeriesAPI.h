@@ -13,7 +13,8 @@ namespace ENB_API
 	enum class SDKVersion : long
 	{
 		V1000 = 1000,
-		V1001 = 1001
+		V1001 = 1001,
+		V1002 = 1002,
 	};
 
 	enum class ENBWindowType : int
@@ -255,13 +256,45 @@ namespace ENB_API
 		}
 	};
 
+	class ENBSDKT1002 : public ENBSDK1001
+	{
+	};
+
+	class ENBSDKALT1002 : public ENBSDKALT1001
+	{
+	public:
+		
+		struct ENBTimeOfDay
+		{
+			float dawn;
+			float sunrise;
+			float day;
+			float sunset;
+			float dusk;
+			float night;
+		};
+
+		ENBTimeOfDay GetTimeOfDay()
+		{
+			return {
+				std::bit_cast<float>(GetState(ENBStateType::ENBState_fTODFactorDawn)),
+				std::bit_cast<float>(GetState(ENBStateType::ENBState_fTODFactorSunrise)),
+				std::bit_cast<float>(GetState(ENBStateType::ENBState_fTODFactorDay)),
+				std::bit_cast<float>(GetState(ENBStateType::ENBState_fTODFactorSunset)),
+				std::bit_cast<float>(GetState(ENBStateType::ENBState_fTODFactorDusk)),
+				std::bit_cast<float>(GetState(ENBStateType::ENBState_fTODFactorNight))
+			};
+		}
+
+	};
+
 	/// <summary>
 	/// Request the ENB SDK interface.
 	/// Recommended: Send your request during or after SKSEMessagingInterface::kMessage_PostLoad to make sure the dll has already been loaded
 	/// </summary>
 	/// <param name="a_ENBSDKVersion">The SDK version to request</param>
 	/// <returns>The pointer to the API singleton, or nullptr if request failed</returns>
-	[[nodiscard]] static inline void* RequestENBAPI(const SDKVersion a_ENBSDKVersion = SDKVersion::V1001)
+	[[nodiscard]] static inline void* RequestENBAPI(const SDKVersion a_ENBSDKVersion = SDKVersion::V1002)
 	{
 		DWORD   cb = 1000 * sizeof(HMODULE);
 		DWORD   cbNeeded = 0;

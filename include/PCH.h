@@ -1,9 +1,6 @@
 #pragma once
 
 #pragma warning(push)
-#pragma warning(disable: 5105)
-#pragma warning(disable: 4189)
-
 #if defined(FALLOUT4)
 #	include "F4SE/F4SE.h"
 #	include "RE/Fallout.h"
@@ -15,19 +12,8 @@
 #else
 #	include "RE/Skyrim.h"
 #	include "SKSE/SKSE.h"
-#	if defined(SKYRIMAE)
-#		define RUNTIME 0
-#	elif defined(SKYRIMVR)
-#		define RUNTIME SKSE::RUNTIME_VR_1_4_15_1
-#	else
-#		define RUNTIME SKSE::RUNTIME_1_5_97
-#	endif
 #endif
 
-//#define MAGIC_ENUM_RANGE_MAX 256
-//#include <magic_enum.hpp>
-
-#include <ShlObj_core.h>
 #include <Windows.h>
 
 #ifdef NDEBUG
@@ -61,7 +47,7 @@ namespace stl
 	}
 
 	template <std::size_t idx, class T>
-	void write_vfunc(REL::VariantID id)
+	void write_vfunc(REL::ID id)
 	{
 		REL::Relocation<std::uintptr_t> vtbl{ id };
 		T::func = vtbl.write_vfunc(idx, T::thunk);
@@ -78,3 +64,62 @@ namespace util
 #define DLLEXPORT __declspec(dllexport)
 
 #include "Plugin.h"
+
+void Load();
+
+void InitializeLog()
+{
+#ifndef NDEBUG
+	auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
+#else
+	auto path = logger::log_directory();
+	if (!path) {
+		util::report_and_fail("Failed to find standard logging directory"sv);
+	}
+
+	*path /= fmt::format("{}.log"sv, Plugin::NAME);
+	auto       sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
+#endif
+
+#ifndef NDEBUG
+	const auto level = spdlog::level::trace;
+#else
+	const auto level = spdlog::level::info;
+#endif
+
+	auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
+	log->set_level(level);
+	log->flush_on(level);
+
+	spdlog::set_default_logger(std::move(log));
+	spdlog::set_pattern("[%l] %v"s);
+}
+
+EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
+{
+#ifndef NDEBUG
+	while (!IsDebuggerPresent()) {};
+#endif
+	InitializeLog();
+	logger::info("Loaded plugin");
+	SKSE::Init(a_skse);
+	Load();
+	return true;
+}
+
+EXTERN_C [[maybe_unused]] __declspec(dllexport) constinit auto SKSEPlugin_Version = []() noexcept {
+	SKSE::PluginVersionData v;
+	v.PluginName(Plugin::NAME.data());
+	v.PluginVersion(Plugin::VERSION);
+	v.UsesAddressLibrary(true);
+	v.HasNoStructUse();
+	return v;
+}();
+
+EXTERN_C [[maybe_unused]] __declspec(dllexport) bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo* pluginInfo)
+{
+	pluginInfo->name = SKSEPlugin_Version.pluginName;
+	pluginInfo->infoVersion = SKSE::PluginInfo::kVersion;
+	pluginInfo->version = SKSEPlugin_Version.pluginVersion;
+	return true;
+}
