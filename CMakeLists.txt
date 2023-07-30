@@ -9,6 +9,8 @@ project(
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include(XSEPlugin)
 
+find_package(imgui CONFIG REQUIRED)
+
 target_include_directories(
 	"${PROJECT_NAME}"
 	PUBLIC
@@ -20,3 +22,9 @@ target_include_directories(
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC CommonLibSSE::CommonLibSSE)
+
+target_link_libraries(
+	${PROJECT_NAME} 
+	PRIVATE
+		imgui::imgui
+)

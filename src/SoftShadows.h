@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ENB/ENBSeriesAPI.h"
 #include <shared_mutex>
 
 class SoftShadows
@@ -52,10 +51,6 @@ public:
 	void SaveINI();
 
 	void Update();
-
-	// ENB UI
-
-	void RefreshUI();
 
 protected:
 	struct Hooks
