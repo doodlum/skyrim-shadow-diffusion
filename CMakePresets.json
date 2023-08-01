@@ -22,6 +22,10 @@
 					"type": "STRING",
 					"value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 				},
+				"VCPKG_OVERLAY_PORTS": {
+					"type": "STRING",
+					"value": "${sourceDir}/cmake/ports/"
+				  },
 				"VCPKG_TARGET_TRIPLET": "x64-windows-static-md"
 			}
 		},
@@ -129,7 +133,8 @@
 				"BUILD_SKYRIM": true,
 				"ENABLE_SKYRIM_AE": "ON",
 				"ENABLE_SKYRIM_SE": "ON",
-				"ENABLE_SKYRIM_VR": "OFF"
+				"ENABLE_SKYRIM_VR": "OFF",
+				"Build Tests": "OFF"
 			},
 			"inherits": [
 				"common",

@@ -3,12 +3,13 @@ option(BUILD_FALLOUT4 "Build for Fallout 4" OFF)
 
 if(BUILD_SKYRIM)
 	add_compile_definitions(SKYRIM)
+	set(CommonLibPath "extern/CommonLibSSE-NG")
 	set(CommonLibName "CommonLibSSE")
 	set(GameVersion "Skyrim")
 elseif(BUILD_FALLOUT4)
 	add_compile_definitions(FALLOUT4)
-	set(CommonLibPath "CommonLibF4/CommonLibF4")
-	set(CommonLibName "external/CommonLibF4")
+	set(CommonLibPath "extern/CommonLibF4/CommonLibF4")
+	set(CommonLibName "CommonLibF4")
 	set(GameVersion "Fallout 4")
 else()
 	message(
@@ -47,8 +48,6 @@ target_sources(
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/Plugin.h
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/version.rc
-		.clang-format
-		.editorconfig
 )
 
 target_precompile_headers(
@@ -115,10 +114,21 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
 	)
 endif()
 
-if (BUILD_SKYRIM)
-	find_package(CommonLibSSE REQUIRED)
-else()
-	add_subdirectory(${CommonLibPath} ${CommonLibName} EXCLUDE_FROM_ALL)
-endif()
+add_subdirectory(${CommonLibPath} ${CommonLibName} EXCLUDE_FROM_ALL)
 
 find_package(spdlog CONFIG REQUIRED)
+
+target_include_directories(
+	${PROJECT_NAME}
+	PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+	PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR}/cmake
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(
+	${PROJECT_NAME} 
+	PUBLIC 
+		CommonLibSSE::CommonLibSSE
+)
