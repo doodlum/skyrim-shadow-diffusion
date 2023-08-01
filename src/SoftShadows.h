@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ENB/ENBSeriesAPI.h"
 #include <shared_mutex>
 
 class SoftShadows
@@ -27,40 +26,31 @@ public:
 	// Settings
 
 	bool  bEnabled = true;
-	float fPoissonRadiusScaleBase = 4.0f;
-	float fFirstSliceDistanceBase = 2000.0f;
-	float fFirstSliceDistanceScale = 0.5f;
 
-	float fDiffusionBase = 0.1f;
-	float fDiffusionCurve = 20.0f;
-	float fDiffusionMin = 1.0f;
-	float fDiffusionMax = 20.0f;
-	float fDiffusionInterior = 1.0f;
+	float fPoissonRadiusScaleBase = 1.0f;
 
-	float fDawnMultiplier = 1.0f;
-	float fSunriseMultiplier = 1.0f;
-	float fDayMultiplier = 1.0f;
-	float fSunsetMultiplier = 1.0f;
-	float fDuskMultiplier = 1.0f;
-	float fNightMultiplier = 1.0f;
+	float fSoftnessCurve = 4.0f;
+	float fSoftnessMax = 20.0f;
+	float fSoftnessInterior = 8.0f;
 
-	float diffusion = 1.0f;
+	float softness = 1.0f;
+
 	float ambient = 1.0f;
 	float sunlight = 1.0f;
+	float sunlightAngle = 1.0f;
 
-	void LoadINI();
-	void SaveINI();
+	void Load();
+	void Save();
 
 	void Update();
 
-	// ENB UI
-
-	void RefreshUI();
+	void Menu();
 
 protected:
+
 	struct Hooks
 	{
-		struct PlayerCharacter_Update
+		struct PlayerCharacter_Update 
 		{
 			static void thunk(RE::PlayerCharacter* a_player, float a_delta)
 			{
@@ -79,7 +69,7 @@ protected:
 private:
 	SoftShadows()
 	{
-		LoadINI();
+		Load();
 	};
 
 	SoftShadows(const SoftShadows&) = delete;
