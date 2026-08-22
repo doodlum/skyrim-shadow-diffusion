@@ -2,14 +2,28 @@
   "name": "commonlibsse-plugin",
   "version-string": "1.0.0",
   "description": "",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "dependencies": [
-    "fmt",
+    {
+      "name": "fmt",
+      "version>=": "12.1.0"
+    },
     "rapidcsv",
-    "spdlog",
+    {
+      "name": "spdlog",
+      "version>=": "1.16.0"
+    },
     "magic-enum",
     "xbyak",
-    "catch2"
+    "catch2",
+    {
+      "name": "directxmath",
+      "version>=": "2025-04-03"
+    },
+    {
+      "name": "directxtk",
+      "version>=": "2025-10-27"
+    }
   ],
-  "builtin-baseline": "36fb23307e10cc6ffcec566c46c4bb3f567c82c6"
+  "builtin-baseline": "ee12231b20c95013c6638d845d04c91559a1d1ff"
 }

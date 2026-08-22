@@ -85,7 +85,8 @@ void SoftShadows::Update()
 					auto sunLight = skyrim_cast<RE::NiDirectionalLight*>(shaderState.shadowSceneNode[0]->GetRuntimeData().sunLight->light.get());
 					auto imageSpaceManager = RE::ImageSpaceManager::GetSingleton();
 
-					sunlight = GetNiColorBrightness(sunLight->GetLightRuntimeData().diffuse) * sunLight->GetLightRuntimeData().fade * (REL::Module::IsVR() ? imageSpaceManager->data.baseData.cinematic.brightness : imageSpaceManager->data.baseData.hdr.sunlightScale);
+					auto& imageSpaceData = imageSpaceManager->GetImageSpaceData();
+					sunlight = GetNiColorBrightness(sunLight->GetLightRuntimeData().diffuse) * sunLight->GetLightRuntimeData().fade * (REL::Module::IsVR() ? imageSpaceData.baseData.cinematic.brightness : imageSpaceData.baseData.hdr.sunlightScale);
 					
 					sunlightAngle = sky->sun->GetRoot()->local.translate.z / 200.0f;
 					sunlightAngle = std::clamp(sunlightAngle, 0.0f, 1.0f);

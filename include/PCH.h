@@ -56,7 +56,7 @@ namespace stl
 }
 
 namespace logger = SKSE::log;
-namespace WinAPI = SKSE::WinAPI;
+namespace WinAPI = REX::W32;
 
 namespace util
 {
